@@ -1,17 +1,24 @@
 ---
-- name: "Install Tmux"
-  apt:
-    name: tmux
-    state: present
-  become: true
-  become_method: sudo
+- name: Ensure ~/.tmux directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.tmux"
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
 
-- name: "Copying Tmux Config"
+- name: Copying Tmux Config
   copy:
     src: "{{ role_path }}/files/.tmux.conf"
-    dest: "{{ ansible_env.HOME }}"
+    dest: "{{ ansible_env.HOME }}/.tmux.conf"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0644'
 
-- name: "Tmux logging script"
+- name: Tmux logging script
   copy:
     src: "{{ role_path }}/files/tmux_logging.sh"
     dest: "{{ ansible_env.HOME }}/.tmux/tmux_logging.sh"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
