@@ -1,3 +1,3 @@
 ---
-- include_tasks: apply_font.yml
+#- include_tasks: apply_font.yml
 - include_tasks: zsh_apply.yml
