@@ -25,6 +25,8 @@
       - libssl-dev
       - zlib1g-dev
       - libbz2-dev
+      - rsyslog
+      - ufw
       - libreadline-dev
       - libsqlite3-dev
       - highlight
