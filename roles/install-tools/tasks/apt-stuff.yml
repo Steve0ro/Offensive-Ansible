@@ -4,15 +4,21 @@
     update_cache: yes
     force_apt_get: yes
     cache_valid_time: 3600
-  become: true
+  become: yes
 
 - name: Upgrade all packages
   apt:
     upgrade: dist
     force_apt_get: yes
-  become: true
+  become: yes
 
-- name: Install required packages
+- name: Fix broken or missing packages
+  command: apt-get -f install -y
+  register: fix_missing_output
+  changed_when: "'0 upgraded, 0 newly installed' not in fix_missing_output.stdout"
+  become: yes
+
+- name: Install required tools
   apt:
     name:
       - build-essential
@@ -83,4 +89,14 @@
       - golang-go
     state: latest
     force_apt_get: yes
-  become: true
+  become: yes
+
+- name: Clean up unused packages
+  apt:
+    autoclean: yes
+  become: yes
+
+- name: Remove unnecessary packages
+  apt:
+    autoremove: yes
+  become: yes

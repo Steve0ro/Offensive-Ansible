@@ -1,17 +1,21 @@
 ---
-# Install PowerShell Core 7+
-- name: Update package cache and fix missing packages
+- name: Update package cache
   apt:
     update_cache: yes
-    fix_missing: yes
+  become: true
+
+- name: Fix broken or missing packages
+  command: apt-get -f install -y
+  register: fix_missing_output
+  changed_when: "'0 upgraded, 0 newly installed' not in fix_missing_output.stdout"
   become: true
 
 - name: Add Microsoft package repository for PowerShell
   shell: |
-    source /etc/os-release
-    wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
+    . /etc/os-release
+    wget -q https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb
     dpkg -i packages-microsoft-prod.deb
-    rm packages-microsoft-prod.deb
+    rm -f packages-microsoft-prod.deb
   args:
     executable: /bin/bash
   become: true
