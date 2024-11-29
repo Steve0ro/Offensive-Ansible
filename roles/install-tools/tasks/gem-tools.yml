@@ -1,0 +1,33 @@
+---
+- name: Ensure Ruby is installed
+  apt:
+    name: ruby-full
+    state: present
+  become: true
+
+- name: Ensure RubyGems is installed
+  apt:
+    name: rubygems
+    state: present
+  become: true
+
+- name: Install required Ruby gems
+  gem:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - logger
+    - stringio
+    - winrm
+    - builder
+    - erubi
+    - gssapi
+    - gyoku
+    - httpclient
+    - logging
+    - little-plugger
+    - nori
+    - rubyntlm
+    - winrm-fs
+    - bundler
+  become: true

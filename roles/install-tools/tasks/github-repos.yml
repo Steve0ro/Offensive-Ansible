@@ -1,0 +1,72 @@
+---
+# Ensure /opt/Tools directory exists
+- name: Ensure /opt/Tools directory exists
+  file:
+    path: /opt/Tools
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
+  become: true
+
+# Clone GitHub repositories
+- name: Clone GitHub repositories
+  git:
+    repo: "{{ item.repo }}"
+    dest: "/opt/Tools/{{ item.name }}"
+    recursive: "{{ item.recursive | default(false) }}"
+  loop:
+    - { repo: "https://github.com/DidierStevens/DidierStevensSuite", name: "DidierStevensSuite" }
+    - { repo: "https://github.com/BC-SECURITY/Empire.git", name: "Empire", recursive: true }
+    - { repo: "https://github.com/danielbohannon/Invoke-Obfuscation", name: "Invoke-Obfuscation" }
+    - { repo: "https://github.com/t0thkr1s/gpp-decrypt", name: "gpp-decrypt" }
+    - { repo: "https://github.com/rasta-mouse/Sherlock", name: "Sherlock" }
+    - { repo: "https://github.com/PowerShellMafia/PowerSploit", name: "PowerSploit" }
+    - { repo: "https://github.com/samratashok/nishang", name: "nishang" }
+    - { repo: "https://github.com/honze-net/nmap-bootstrap-xsl", name: "nmap-bootstrap-xsl" }
+    - { repo: "https://github.com/sqlmapproject/sqlmap", name: "sqlmap" }
+    - { repo: "https://github.com/RUB-NDS/PRET", name: "PRET" }
+    - { repo: "https://github.com/peass-ng/PEASS-ng", name: "PEASS-ng" }
+    - { repo: "https://github.com/joey-melo/netcredz", name: "netcredz" }
+    - { repo: "https://github.com/AlmondOffSec/PassTheCert", name: "PassTheCert" }
+    - { repo: "https://github.com/topotam/PetitPotam", name: "PetitPotam" }
+    - { repo: "https://github.com/nicocha30/ligolo-ng", name: "ligolo-ng" }
+    - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
+    - { repo: "https://github.com/danielmiessler/SecLists", name: "SecLists" }
+    #- { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
+  become: true
+
+# Verify Empire directory exists
+- name: Verify Empire exists
+  stat:
+    path: /opt/Tools/Empire
+  register: empire_dir
+
+# Run commands for Empire
+## Fails to install, need to work this one out..
+#- name: Run commands for Empire
+#  shell: |
+#    ./setup/checkout-latest-tag.sh
+#    ./ps-empire install -y
+#  args:
+#    chdir: /opt/Tools/Empire
+#  when: empire_dir.stat.exists
+#  become: true
+
+# Install gpp-decrypt
+- name: Install gpp-decrypt
+  shell: python3 setup.py install
+  args:
+    chdir: /opt/Tools/gpp-decrypt
+  become: true
+
+# Build ligolo-ng binaries
+- name: Build ligolo-ng binaries
+  shell: |
+    go build -o agent cmd/agent/main.go
+    go build -o proxy cmd/proxy/main.go
+    GOOS=windows go build -o agent.exe cmd/agent/main.go
+    GOOS=windows go build -o proxy.exe cmd/proxy/main.go
+  args:
+    chdir: /opt/Tools/ligolo-ng
+  become: true

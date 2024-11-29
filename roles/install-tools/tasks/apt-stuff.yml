@@ -1,0 +1,86 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+    cache_valid_time: 3600
+  become: true
+
+- name: Upgrade all packages
+  apt:
+    upgrade: dist
+    force_apt_get: yes
+  become: true
+
+- name: Install required packages
+  apt:
+    name:
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - highlight
+      - gdb
+      - wget
+      - curl
+      - llvm
+      - libncurses5-dev
+      - zsh
+      - libncursesw5-dev
+      - xz-utils
+      - tk-dev
+      - libffi-dev
+      - liblzma-dev
+      - libfuse2
+      - gron
+      - network-manager
+      - binwalk
+      - foremost
+      - hexedit
+      - cargo
+      - unzip
+      - tar
+      - unrar
+      - httpie
+      - zip
+      - vim
+      - libxml2-dev
+      - libxmlsec1-dev
+      - libguestfs-tools
+      - libpoppler-cpp-dev
+      - ltrace
+      - net-tools
+      - openjdk-17-jdk
+      - openjdk-17-jre
+      - p7zip-full
+      - p7zip-rar
+      - poppler-utils
+      - reglookup
+      - sqlite3-tools
+      - tshark
+      - jq
+      - pipx
+      - ntpdate
+      - flameshot
+      - exiftool
+      - tmux
+      - ruby-rubygems
+      - ruby
+      - freerdp2-dev
+      - netexec
+      - crackmapexec
+      - wpscan
+      - evil-winrm
+      - metasploit-framework
+      - msfpc
+      - shellter
+      - whatweb
+      - mimikatz
+      - python3-pypykatz
+      - kerberoast
+      - golang-go
+    state: latest
+    force_apt_get: yes
+  become: true

@@ -1,0 +1,40 @@
+---
+# Install PowerShell Core 7+
+- name: Update package cache and fix missing packages
+  apt:
+    update_cache: yes
+    fix_missing: yes
+  become: true
+
+- name: Add Microsoft package repository for PowerShell
+  shell: |
+    source /etc/os-release
+    wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
+    dpkg -i packages-microsoft-prod.deb
+    rm packages-microsoft-prod.deb
+  args:
+    executable: /bin/bash
+  become: true
+
+- name: Install PowerShell
+  apt:
+    name: powershell
+    state: present
+  become: true
+
+- name: Set timezone to New York
+  file:
+    src: /usr/share/zoneinfo/America/New_York
+    dest: /etc/localtime
+    state: link
+  become: true
+
+- name: Reconfigure timezone data
+  command: dpkg-reconfigure --frontend noninteractive tzdata
+  become: true
+
+- name: Clean up unused packages
+  apt:
+    autoclean: yes
+    autoremove: yes
+  become: true

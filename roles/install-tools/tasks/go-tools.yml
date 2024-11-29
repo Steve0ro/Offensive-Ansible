@@ -1,0 +1,104 @@
+---
+# Ensure Go is installed
+- name: Ensure Go is installed
+  shell: |
+    if ! command -v go &> /dev/null; then
+      curl -OL https://go.dev/dl/go1.23.3.linux-amd64.tar.gz
+      tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+      echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile
+      echo 'export GOPATH=$HOME/go' >> /etc/profile
+      source /etc/profile
+    fi
+  args:
+    executable: /bin/bash
+  become: true
+
+# Add Go bin path to user environment
+- name: Add Go bin path to user environment
+  lineinfile:
+    path: ~/.bashrc
+    line: 'export PATH=$PATH:$HOME/go/bin'
+    state: present
+
+# Install Go tools
+- name: Install amass
+  shell: go install -v github.com/owasp-amass/amass/v4/...@master
+  args:
+    executable: /bin/bash
+
+- name: Install gospider
+  shell: |
+    export GO111MODULE=on
+    go install github.com/jaeles-project/gospider@latest
+  args:
+    executable: /bin/bash
+
+- name: Install anew
+  shell: go install github.com/tomnomnom/anew@latest
+  args:
+    executable: /bin/bash
+
+- name: Install gobuster
+  shell: go install github.com/OJ/gobuster/v3@latest
+  args:
+    executable: /bin/bash
+
+- name: Install gf
+  shell: go install github.com/tomnomnom/gf@latest
+  args:
+    executable: /bin/bash
+
+- name: Install meg
+  shell: go install github.com/tomnomnom/meg@latest
+  args:
+    executable: /bin/bash
+
+- name: Install httprobe
+  shell: go install github.com/tomnomnom/httprobe@latest
+  args:
+    executable: /bin/bash
+
+- name: Install shortscan
+  shell: go install github.com/bitquark/shortscan/cmd/shortscan@latest
+  args:
+    executable: /bin/bash
+
+- name: Install kerbrute
+  shell: go install github.com/ropnop/kerbrute@latest
+  args:
+    executable: /bin/bash
+
+- name: Install httpx
+  shell: go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+  args:
+    executable: /bin/bash
+
+- name: Install nuclei
+  shell: go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+  args:
+    executable: /bin/bash
+
+- name: Install cheat
+  shell: go install github.com/cheat/cheat/cmd/cheat@latest
+  args:
+    executable: /bin/bash
+
+- name: Install dnsx
+  shell: go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+  args:
+    executable: /bin/bash
+
+- name: Install subfinder
+  shell: go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+  args:
+    executable: /bin/bash
+
+- name: Install smap
+  shell: go install -v github.com/s0md3v/smap/cmd/smap@latest
+  args:
+    executable: /bin/bash
+
+- name: Install ffuf
+  shell: go install -v github.com/ffuf/ffuf/v2@latest
+  args:
+    executable: /bin/bash
