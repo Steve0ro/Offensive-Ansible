@@ -1,5 +1,4 @@
 ---
-# Install xq
 - name: Install xq using provided script
   shell: curl -sSL https://bit.ly/install-xq | bash
   become: true

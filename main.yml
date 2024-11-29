@@ -4,11 +4,10 @@
   connection: local
   roles:
     - role: "roles/install-tools"
-    #- role: "roles/configure-tmux"
-    #- role: "roles/customize-terminal"
+    - role: "roles/configure-tmux"
     #- role: "roles/customize-browser"
-    #- role: "roles/configure-logging"
-    #- role: "roles/configure-system"
+    - role: "roles/configure-logging"
+    - role: "roles/customize-terminal"
     - role: gantsign.visual-studio-code
       vars:
         users:

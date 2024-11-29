@@ -1,5 +1,5 @@
 ---
-# Ensure Go is installed
+# Install latest Golang version
 - name: Ensure Go is installed
   shell: |
     if ! command -v go &> /dev/null; then
@@ -13,14 +13,12 @@
     executable: /bin/bash
   become: true
 
-# Add Go bin path to user environment
 - name: Add Go bin path to user environment
   lineinfile:
     path: ~/.bashrc
     line: 'export PATH=$PATH:$HOME/go/bin'
     state: present
 
-# Install Go tools
 - name: Install amass
   shell: go install -v github.com/owasp-amass/amass/v4/...@master
   args:

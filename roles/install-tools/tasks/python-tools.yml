@@ -1,5 +1,4 @@
 ---
-# Ensure Python and pip are installed
 - name: Ensure Python and pip are installed
   apt:
     name:
@@ -9,7 +8,6 @@
     state: present
   become: true
 
-# Install pipx if not already installed
 - name: Install pipx if not already installed
   shell: sudo apt-get install -y pipx
   args:
@@ -18,28 +16,23 @@
     PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
   when: "'pipx' not in lookup('env', 'PATH')"
 
-# Ensure pipx path is in user environment
 - name: Ensure pipx path is in user environment
   lineinfile:
     path: ~/.bashrc
     line: 'export PATH=$PATH:~/.local/bin'
     state: present
 
-# Source bashrc to update environment
 - name: Source bashrc to update environment
   shell: source ~/.bashrc
   args:
     executable: /bin/bash
 
-# Install tools using pipx
 - name: Install tools using pipx
   community.general.pipx:
     name: "{{ item }}"
     state: latest
   loop:
-    - pwn
     - mitmproxy2swagger
     - arjun
-    - pysnmp-lextudio==5.0.31
     - xlsxgrep
     - certipy-ad

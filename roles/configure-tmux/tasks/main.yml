@@ -5,9 +5,13 @@
     state: present
   become: true
   become_method: sudo
+
 - name: "Copying Tmux Config"
   copy:
     src: "{{ role_path }}/files/.tmux.conf"
     dest: "{{ ansible_env.HOME }}"
 
-
+- name: "Tmux logging script"
+  copy:
+    src: "{{ role_path }}/files/tmux_logging.sh"
+    dest: "{{ ansible_env.HOME }}/.tmux/tmux_logging.sh"
