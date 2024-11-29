@@ -30,7 +30,6 @@
     - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
     - { repo: "https://github.com/danielmiessler/SecLists", name: "SecLists" }
     #- { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
-  become: true
 
 - name: Build ligolo-ng binaries
   shell: |
@@ -40,7 +39,6 @@
     GOOS=windows go build -o proxy.exe cmd/proxy/main.go
   args:
     chdir: /opt/Tools/ligolo-ng
-  become: true
 
 # Allows current user to own tools directory
 - name: Ensure current user owns all files in /opt/Tools

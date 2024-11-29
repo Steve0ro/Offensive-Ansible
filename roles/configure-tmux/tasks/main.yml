@@ -1,7 +1,15 @@
 ---
-- name: Ensure ~/.tmux directory exists
+- name: Checks if tmux directory exists
   file:
     path: "{{ ansible_env.HOME }}/.tmux"
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
+
+- name: Checks if Logs directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/Logs"
     state: directory
     owner: "{{ lookup('env', 'USER') }}"
     group: "{{ lookup('env', 'USER') }}"
