@@ -1,0 +1,25 @@
+---
+- name: Ensure ~/.fonts directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.fonts"
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
+
+- name: Download FiraCode Nerd Font zip
+  get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
+    dest: "{{ ansible_env.HOME }}/FiraCode.zip"
+    mode: '0644'
+
+- name: Unzip FiraCode Nerd Font
+  unarchive:
+    src: "{{ ansible_env.HOME }}/FiraCode.zip"
+    dest: "{{ ansible_env.HOME }}/.fonts/FiraCode/"
+    remote_src: yes
+  become: true
+  become_method: sudo
+
+- name: Refresh font cache
+  command: fc-cache -fv

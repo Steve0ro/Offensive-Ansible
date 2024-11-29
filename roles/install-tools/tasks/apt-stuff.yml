@@ -12,12 +12,6 @@
     force_apt_get: yes
   become: yes
 
-- name: Fix broken or missing packages
-  command: apt-get -f install -y
-  register: fix_missing_output
-  changed_when: "'0 upgraded, 0 newly installed' not in fix_missing_output.stdout"
-  become: yes
-
 - name: Install required tools
   apt:
     name:

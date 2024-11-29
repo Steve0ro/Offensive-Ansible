@@ -1,10 +1,3 @@
 ---
-- name: "Copy ZSHRC"
-  copy:
-    src: "{{ role_path }}/files/.zshrc"
-    dest: "{{ ansible_env.HOME }}"
-
-- name: "Copy ZSH theme"
-  copy:
-    src: "{{ role_path }}/files/steve0ro.zsh-theme"
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/themes/"
+- include_tasks: apply_font.yml
+- include_tasks: zsh_apply.yml

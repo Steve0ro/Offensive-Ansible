@@ -7,4 +7,5 @@
 - include_tasks: xq-install.yml
 - include_tasks: powershell.yml
 - include_tasks: node.yml
+- include_tasks: firacode.yml
 - include_tasks: zsh.yml
