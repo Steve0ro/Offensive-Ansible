@@ -12,6 +12,10 @@
     force_apt_get: yes
   become: yes
 
+- name: Refresh sudo token
+  become: yes
+  ansible.builtin.command: echo "Sudo refreshed"
+
 - name: Install required tools
   apt:
     name:
@@ -70,8 +74,10 @@
       - tmux
       - ruby-rubygems
       - ruby
-      - freerdp2-dev
+      - freerdp2-x11
+      - impacket-scripts
       - netexec
+      - responder
       - crackmapexec
       - wpscan
       - evil-winrm
@@ -86,6 +92,10 @@
     state: latest
     force_apt_get: yes
   become: yes
+
+- name: Refresh sudo token
+  become: yes
+  ansible.builtin.command: echo "Sudo refreshed"
 
 - name: Clean up unused packages
   apt:

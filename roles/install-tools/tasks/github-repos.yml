@@ -8,6 +8,10 @@
     mode: '0755'
   become: true
 
+- name: Refresh sudo token
+  become: yes
+  ansible.builtin.command: echo "Sudo refreshed"
+
 - name: Clone GitHub repositories
   git:
     repo: "{{ item.repo }}"
@@ -29,7 +33,7 @@
     - { repo: "https://github.com/nicocha30/ligolo-ng", name: "ligolo-ng" }
     - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
     - { repo: "https://github.com/danielmiessler/SecLists", name: "SecLists" }
-    #- { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
+#    - { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
 
 - name: Build ligolo-ng binaries
   shell: |
