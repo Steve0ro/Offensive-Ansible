@@ -23,7 +23,7 @@ if [ $? -gt 0 ]; then
 fi
 
 printf "[+] Running playbooks in verbose mode..\n"
-ansible-playbook main.yml -vvv
+ansible-playbook main.yml -vvv -K
 if [ $? -gt 0 ]; then
     printf "[!] Error occurred during playbook run.\n"
     exit 1    
