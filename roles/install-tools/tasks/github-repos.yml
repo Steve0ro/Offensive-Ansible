@@ -33,7 +33,9 @@
     - { repo: "https://github.com/nicocha30/ligolo-ng", name: "ligolo-ng" }
     - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
     - { repo: "https://github.com/danielmiessler/SecLists", name: "SecLists" }
-#    - { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
+    - { repo: "https://github.com/ShutdownRepo/pywhisker", name: "pywhisker" }
+    - { repo: "https://github.com/dirkjanm/PKINITtools", name: "PKINITtools" }        
+    - { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
 
 - name: Build ligolo-ng binaries
   shell: |

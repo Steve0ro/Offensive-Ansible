@@ -89,6 +89,11 @@
       - python3-pypykatz
       - kerberoast
       - golang-go
+      - python3-minikerberos
+      - bloodyad
+      - smbmap
+      - feroxbuster
+      - dirsearch
     state: latest
     force_apt_get: yes
   become: yes
