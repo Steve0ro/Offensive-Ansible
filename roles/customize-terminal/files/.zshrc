@@ -7,6 +7,7 @@ export GOPATH="$HOME/go"
 export PATH=$PATH:$GOBIN
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.local/bin
+export PATH=/home/steve0ro/.nimble/bin:$PATH
 
 # ZSH Theme
 ZSH_THEME="steve0ro"
@@ -36,7 +37,7 @@ unalias gf
 alias ip="ip -c"
 alias sqlmap="python /opt/Tools/sqlmap/./sqlmap.py"
 alias vi='vim'
-alias py='python'
+alias py='python3'
 alias grep='grep --color=always'
 alias colorMe='highlight -O xterm256'
 alias uz='unzip'

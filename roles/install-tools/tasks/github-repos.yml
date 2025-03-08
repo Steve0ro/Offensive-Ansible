@@ -34,8 +34,8 @@
     - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
     - { repo: "https://github.com/danielmiessler/SecLists", name: "SecLists" }
     - { repo: "https://github.com/ShutdownRepo/pywhisker", name: "pywhisker" }
-    - { repo: "https://github.com/dirkjanm/PKINITtools", name: "PKINITtools" }        
-    #    - { repo: "https://github.com/Flangvik/SharpCollection", name: "SharpCollection" }    
+    - { repo: "https://github.com/dirkjanm/PKINITtools", name: "PKINITtools" }
+    - { repo: "https://github.com/JohnHammond/binnim", name: "binnim" }
 
 - name: Build ligolo-ng binaries
   shell: |
@@ -45,6 +45,20 @@
     GOOS=windows go build -o proxy.exe cmd/proxy/main.go
   args:
     chdir: /opt/Tools/ligolo-ng
+
+- name: Build nim
+  shell: |
+    echo "Installig nim"
+    curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+  args:
+    executable: /bin/bash
+
+- name: Build binnim binary
+  shell: |
+    nimble build
+    nimble install
+  args:
+    chdir: /opt/Tools/binnim
 
 # Allows current user to own tools directory
 - name: Ensure current user owns all files in /opt/Tools

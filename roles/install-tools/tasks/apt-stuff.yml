@@ -76,7 +76,7 @@
       - tmux
       - ruby-rubygems
       - ruby
-      - freerdp2-x11
+      - freerdp3-x11
       - impacket-scripts
       - netexec
       - responder
