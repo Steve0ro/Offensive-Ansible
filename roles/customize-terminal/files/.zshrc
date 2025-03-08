@@ -7,7 +7,7 @@ export GOPATH="$HOME/go"
 export PATH=$PATH:$GOBIN
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.local/bin
-export PATH=/home/steve0ro/.nimble/bin:$PATH
+export PATH=/home/$USER/.nimble/bin:$PATH
 
 # ZSH Theme
 ZSH_THEME="steve0ro"

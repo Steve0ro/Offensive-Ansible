@@ -49,7 +49,14 @@
 - name: Build nim
   shell: |
     echo "Installig nim"
-    curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+    curl -sSf https://nim-lang.org/choosenim/init.sh | sh -s -- -y
+  args:
+    executable: /bin/bash
+
+- name: Set PATH for nim
+  shell: |
+    echo "Setting PATH for $USER"
+    export PATH=/home/$USER/.nimble/bin:$PATH
   args:
     executable: /bin/bash
 
