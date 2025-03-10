@@ -4,7 +4,8 @@
 sudo whoami
 
 # Ensure .local/bin is in the PATH for ansible executables
-PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/.local/bin
+export PATH=/home/$USER/.nimble/bin:$PATH
 
 if ! command -v ansible >/dev/null; then
     printf "[+] Installing Ansible\n"
