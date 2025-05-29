@@ -8,14 +8,6 @@
     state: present
   become: true
 
-- name: Install pipx if not already installed
-  shell: sudo apt-get install -y pipx
-  args:
-    executable: /bin/bash
-  environment:
-    PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
-  when: "'pipx' not in lookup('env', 'PATH')"
-
 - name: Ensure pipx path is in user environment
   lineinfile:
     path: ~/.bashrc
