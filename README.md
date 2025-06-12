@@ -1,27 +1,40 @@
-# Parrot-Build
+# Offensive-Ansible Build
+A streamlined Linux build deployment tool originally created by IppSec, and thoughtfully modified and maintained by Steve0ro to support modern offensive security workflows.
 
-Original creator [IppSec's Parrot-Build](https://github.com/IppSec/parrot-build).
+## Overview
+Automates the setup of a penetration testing environment on Kali-Linux distribution. It provides a simplified deployment mechanism via a single script, ideal for offensive security professionals and enthusiasts looking to quickly bootstrap their toolkit.
 
-Modified by **Steve0ro**.
+## Getting Started
+1. Clone the Repository
 
-## Instructions
-
-### Clone the repo.
 ```bash
 git clone https://github.com/steve0ro/Offensive-Build
+cd Offensive-Build
 ```
 
-### Run the deploy script
+2. Run the Deployment Script
 ```bash
 bash ./deploy.sh
 ```
 
----
+This will install the necessary tools and configurations specific to your environment.
 
-# To Do
+### Compatibility
+✅ Kali Linux
 
-- Add seperate playbooks for other nix* distros
+### ⚠️ Support for additional Linux distributions is under development.
 
----
+### Roadmap
+- Create dedicated Ansible playbooks for additional Unix-like distributions (e.g., Ubuntu, Arch, Fedora)
 
-### Currently works on kali and parrotOS
+- Improve logging and error handling
+
+- Add user-selectable modules during setup
+
+#### Acknowledgements
+Original concept and build: IppSec
+
+Customization and enhancements: Steve0ro
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
