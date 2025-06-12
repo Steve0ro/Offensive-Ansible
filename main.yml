@@ -2,7 +2,7 @@
 - name: Offensive Ansible - System Configuration
   hosts: localhost
   connection: local
-  become: true
+  become: false
   gather_facts: true
 
   pre_tasks:

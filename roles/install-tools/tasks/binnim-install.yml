@@ -1,0 +1,39 @@
+---
+- name: Add NIM bin path to user environment
+  lineinfile:
+    path: ~/.zshrc
+    line: 'export PATH=/home/$USER/.nimble/bin:$PATH'
+    state: present
+
+- name: Build nim
+  shell: |
+    echo "Installig nim"
+    curl -sSf https://nim-lang.org/choosenim/init.sh | sh -s -- -y
+  args:
+    executable: /bin/bash
+
+- name: Print PATH
+  shell: echo $PATH
+  register: path_output
+
+- debug:
+    var: path_output.stdout
+
+- name: Build binnim binary
+  shell: |
+    export PATH=$HOME/.nimble/bin:$PATH
+    nimble build
+    nimble install
+  args:
+    chdir: /opt/Tools/binnim
+
+# Allows current user to own tools directory
+- name: Ensure current user owns all files in /opt/Tools
+  file:
+    path: /opt/Tools
+    state: directory
+    recurse: yes
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
+  become: true

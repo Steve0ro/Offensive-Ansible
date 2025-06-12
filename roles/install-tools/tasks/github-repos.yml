@@ -41,7 +41,6 @@
     - { repo: "https://github.com/LuemmelSec/Pentest-Tools-Collection", name: "Pentest-Tools-Collection" }
     - { repo: "https://github.com/JohnHammond/binnim", name: "binnim" }
 
-
 - name: Build ligolo-ng binaries
   shell: |
     go build -o agent cmd/agent/main.go
@@ -50,35 +49,3 @@
     GOOS=windows go build -o proxy.exe cmd/proxy/main.go
   args:
     chdir: /opt/Tools/ligolo-ng
-
-- name: Set PATH for nim
-  shell: |
-    echo "Setting PATH for $USER"
-    export PATH=/home/$USER/.nimble/bin:$PATH
-  args:
-    executable: /bin/bash
-
-- name: Build nim
-  shell: |
-    echo "Installig nim"
-    curl -sSf https://nim-lang.org/choosenim/init.sh | sh -s -- -y
-  args:
-    executable: /bin/bash
-
-- name: Build binnim binary
-  shell: |
-    nimble build
-    nimble install
-  args:
-    chdir: /opt/Tools/binnim
-
-# Allows current user to own tools directory
-- name: Ensure current user owns all files in /opt/Tools
-  file:
-    path: /opt/Tools
-    state: directory
-    recurse: yes
-    owner: "{{ lookup('env', 'USER') }}"
-    group: "{{ lookup('env', 'USER') }}"
-    mode: '0755'
-  become: true

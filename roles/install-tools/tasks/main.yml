@@ -3,9 +3,8 @@
 - include_tasks: zsh.yml
 - include_tasks: go-tools.yml
 - include_tasks: github-repos.yml
+- include_tasks: binnim-install.yml
 - include_tasks: python-tools.yml
 - include_tasks: gem-tools.yml
 - include_tasks: xq-install.yml
 - include_tasks: powershell.yml
-- include_tasks: node.yml
-

@@ -1,6 +1,5 @@
 # Exports
 export ZSH="$HOME/.oh-my-zsh"
-# export PATH=/usr/local/lib/nodejs/node-vXX.XX.X-linux-x64/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin
 export GOBIN="$HOME/go/bin"
 export GOPATH="$HOME/go"
