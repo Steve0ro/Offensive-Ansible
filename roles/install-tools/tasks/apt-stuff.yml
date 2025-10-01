@@ -63,7 +63,6 @@
       - openjdk-21-jdk
       - openjdk-21-jre
       - p7zip-full
-      - p7zip-rar
       - poppler-utils
       - reglookup
       - sqlite3-tools
