@@ -28,8 +28,6 @@
   become: true
   when: not burp_cert.stat.exists
 
-
-# Determine the non-root user who should receive the Burp config
 - name: "Determine deploy user"
   set_fact:
     deploy_user: "{{ lookup('env','USER') }}"
