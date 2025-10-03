@@ -12,6 +12,9 @@
 
 - name: "Executing bash script to Download CA Certificate"
   shell: /tmp/getburpcert.sh
+  register: burp_run
+  changed_when: "'Launched' in burp_run.stdout or burp_run.rc == 0"
+  failed_when: "not (burp_run.rc == 0 or 'cert saved to /tmp/cacert.der' in burp_run.stdout)"
   when: not burp_cert.stat.exists
 
 - name: "Copying CA Certificate to /usr/local/share/ca-certificates"
@@ -20,9 +23,11 @@
     dest: /usr/local/share/ca-certificates/BurpSuiteCA.der
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
+    remote_src: yes
   become: true
   when: not burp_cert.stat.exists
+
 
 # Determine the non-root user who should receive the Burp config
 - name: "Determine deploy user"
