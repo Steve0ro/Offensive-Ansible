@@ -18,7 +18,7 @@
     - { role: configure-tmux,   tags: [tmux] }
     - { role: configure-logging,tags: [logging] }
     - { role: customize-terminal,tags: [terminal] }
-    - { role: customize-browser,tags: [browser] }
+#    - { role: customize-browser,tags: [browser] }
 
 - name: Install Visual Studio Code Extensions (non-root)
   hosts: localhost
