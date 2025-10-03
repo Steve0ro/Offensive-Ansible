@@ -1,0 +1,120 @@
+---
+- name: Deploy Adaptix C2 Opsec Profile and Service
+  hosts: localhost
+  connection: local
+  become: true
+  gather_facts: false
+
+  vars_files:
+    - vars/adaptix.yml   # relative to playbook: playbooks/vars/adaptix.yml
+
+  tasks:
+    - name: Ensure /opt/Tools/AdaptixC2 directory exists and is owned by user
+      ansible.builtin.file:
+        path: "{{ adaptix_dir }}/dist"
+        state: directory
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+        mode: '0755'
+
+    - name: Generate random endpoint (MD5-style)
+      ansible.builtin.set_fact:
+        random_endpoint: "{{ lookup('pipe','uuidgen') | hash('md5') }}"
+
+    - name: Generate random password (MD5-style)
+      ansible.builtin.set_fact:
+        random_password: "{{ lookup('pipe','uuidgen') | hash('md5') }}"
+
+    - name: Generate operator passwords
+      ansible.builtin.set_fact:
+        op1_random_password: "{{ lookup('pipe','uuidgen') | hash('md5') }}"
+        op2_random_password: "{{ lookup('pipe','uuidgen') | hash('md5') }}"
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Deploy generated profile.json
+      ansible.builtin.template:
+        src: ./templates/profile.json.j2
+        dest: "{{ adaptix_profile_path }}"
+        mode: '0644'
+
+    - name: Create SSL config file from template
+      ansible.builtin.template:
+        src: ./templates/ssl_config.cnf.j2
+        dest: "{{ adaptix_dir }}/dist/ssl_config.cnf"
+        mode: '0644'
+
+    - name: Generate RSA certificate and key for AdaptixC2
+      ansible.builtin.command: >
+        openssl req -x509 -nodes
+        -newkey rsa:2048
+        -keyout server.rsa.key
+        -out server.rsa.crt
+        -days 3650
+        -config ssl_config.cnf
+      args:
+        chdir: "{{ adaptix_dir }}/dist"
+        creates: "{{ adaptix_dir }}/dist/server.rsa.crt"
+      tags: cert_setup
+
+    - name: Create systemd service for Adaptix
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/adaptix.service
+        content: |
+          [Unit]
+          Description=Adaptix C2 Server
+          After=network.target
+
+          [Service]
+          ExecStart={{ adaptix_dir }}/dist/adaptixserver -profile {{ adaptix_dir }}/dist/profile.json -debug
+          WorkingDirectory={{ adaptix_dir }}/dist
+          Restart=always
+          RestartSec=5
+          StandardOutput=journal
+          StandardError=journal
+          Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          ExecStartPre=/bin/sleep 2
+          Type=simple
+
+          [Install]
+          WantedBy=multi-user.target
+        mode: '0644'
+
+    - name: Reload systemd to pick up adaptix.service (if created/changed)
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Ensure Adaptix service is enabled and started
+      ansible.builtin.systemd:
+        name: adaptix
+        enabled: yes
+        state: started
+
+    - name: Show Adaptix service status
+      ansible.builtin.shell: systemctl status adaptix --no-pager
+      register: adaptix_status
+      changed_when: false
+      failed_when: false
+
+    - name: Display Adaptix service status output
+      ansible.builtin.debug:
+        var: adaptix_status.stdout
+
+    - name: Show generated endpoint
+      ansible.builtin.debug:
+        msg: "AdaptixC2 Endpoint: /{{ random_endpoint }}"
+
+    - name: Show generated password (server)
+      ansible.builtin.debug:
+        msg: "AdaptixC2 Password: {{ random_password }}"
+
+    - name: Show Operator1 password
+      ansible.builtin.debug:
+        msg: "Operator1 Password: {{ op1_random_password }}"
+
+    - name: Show Operator2 password
+      ansible.builtin.debug:
+        msg: "Operator2 Password: {{ op2_random_password }}"

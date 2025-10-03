@@ -1,0 +1,10 @@
+adaptix_dir: "/opt/Tools/AdaptixC2"
+adaptix_profile_path: "{{ adaptix_dir }}/dist/profile.json"
+
+cert_C: "NV"
+cert_ST: "Gonna"
+cert_L: "Give"
+cert_O: "YouUp"
+cert_OU: "Never"
+cert_CN: "Gonna"
+cert_email: "let@youdown.com"

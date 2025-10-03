@@ -1,0 +1,31 @@
+---
+- name: Determine deploy user
+  set_fact:
+    deploy_user: >-
+      {{ (lookup('env','SUDO_USER') | default('')) or
+         (lookup('env','USER') | default('')) or
+         ansible_user_id }}
+
+- name: Set default allowed commands (empty => NOPASSWD:ALL)
+  set_fact:
+    allowed_commands: "{{ allowed_commands | default([]) }}"
+
+- name: Ensure /etc/sudoers.d exists
+  file:
+    path: /etc/sudoers.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+  become: true
+
+- name: Deploy passwordless sudoers fragment for deploy_user
+  template:
+    src: sudoers.d.j2
+    dest: "/etc/sudoers.d/{{ deploy_user }}"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: '/usr/sbin/visudo -cf %s'
+  become: true
+  when: deploy_user is defined and (deploy_user | length) > 0

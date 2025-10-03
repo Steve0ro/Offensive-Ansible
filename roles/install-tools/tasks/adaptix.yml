@@ -18,12 +18,3 @@
       stdout_lines={{ adaptix_build.stdout_lines | length }}
       stderr_lines={{ adaptix_build.stderr_lines | length }}
   when: adaptix_build is defined
-
-- name: Ensure user has access to repo
-  file:
-    path: /opt/Tools/AdaptixC2
-    state: directory
-    owner: "{{ lookup('env', 'USER') }}"
-    group: "{{ lookup('env', 'USER') }}"
-    mode: '0755'
-  become: true

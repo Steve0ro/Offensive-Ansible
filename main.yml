@@ -1,21 +1,24 @@
 ---
+# Main playbook for Offensive Ansible - system configuration
+
 - name: Offensive Ansible - System Configuration
   hosts: localhost
   connection: local
-  become: false
+  become: true
   gather_facts: true
 
   pre_tasks:
     - name: Ensure system is Kali Linux
-      fail:
+      ansible.builtin.fail:
         msg: "❌ This playbook only supports Kali Linux!"
       when: ansible_distribution != "Kali"
 
   roles:
-    - role: "roles/install-tools"
-    - role: "roles/configure-tmux"
-    - role: "roles/configure-logging"
-    - role: "roles/customize-terminal"
+    - { role: install-tools,    tags: [install,tools] }
+    - { role: configure-tmux,   tags: [tmux] }
+    - { role: configure-logging,tags: [logging] }
+    - { role: customize-terminal,tags: [terminal] }
+#    - { role: customize-browser,tags: [browser] }
 
 - name: Install Visual Studio Code Extensions (non-root)
   hosts: localhost
@@ -23,11 +26,32 @@
   become: false
   gather_facts: true
 
+  vars:
+    vscode_users:
+      - username: "{{ ansible_user_id }}"
+        visual_studio_code_extensions:
+          - ms-python.python
+          - snyk-security.snyk-vulnerability-scanner
+
+  pre_tasks:
+    - name: Check whether the 'code' CLI is available (skip if not)
+      ansible.builtin.command:
+        cmd: command -v code
+      register: code_cli_check
+      changed_when: false
+      failed_when: false
+      check_mode: no
+
+    - name: Show message if 'code' CLI not found
+      ansible.builtin.debug:
+        msg: >-
+          Visual Studio Code 'code' CLI not found — skipping extension install.
+          Install VS Code or ensure the 'code' CLI is on PATH to enable extension installation.
+      when: code_cli_check.rc != 0
+
   roles:
     - role: gantsign.visual-studio-code
+      when: code_cli_check.rc == 0
       vars:
-        users:
-          - username: "{{ ansible_user_id }}"
-            visual_studio_code_extensions:
-              - ms-python.python
-              - snyk-security.snyk-vulnerability-scanner
+        users: "{{ vscode_users }}"
+      tags: [vscode,editor]

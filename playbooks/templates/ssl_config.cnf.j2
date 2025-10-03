@@ -1,0 +1,20 @@
+[req]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+prompt             = no
+x509_extensions    = v3_req
+
+[req_distinguished_name]
+C  = {{ cert_C }}
+ST = {{ cert_ST }}
+L  = {{ cert_L }}
+O  = {{ cert_O }}
+OU = {{ cert_OU }}
+CN = {{ cert_CN }}
+emailAddress = {{ cert_email }}
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = {{ cert_CN }}

@@ -8,7 +8,6 @@
   become: true
 
 - name: Refresh sudo token (if needed)
-  # if you need to refresh become credentials use become: true and run a harmless command
   become: true
   ansible.builtin.command: whoami
 
@@ -22,23 +21,32 @@
   failed_when: build_bh.rc != 0
   changed_when: "'bloodhound-cli' in build_bh.stdout or build_bh.rc == 0"
 
+- name: Determine home directory for the runtime user
+  ansible.builtin.shell: "getent passwd '{{ ansible_user_id }}' | cut -d':' -f6"
+  register: user_home_cmd
+  changed_when: false
+  failed_when: user_home_cmd.rc != 0
+
+- name: Set user_home fact
+  ansible.builtin.set_fact:
+    user_home: "{{ user_home_cmd.stdout }}"
+
 - name: Ensure user's go bin dir exists
   file:
-    path: "{{ ansible_env.HOME }}/go/bin"
+    path: "{{ user_home }}/go/bin"
     state: directory
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     mode: '0755'
-  become: false
+  become: true
 
-- name: Install bloodhound-cli into user's go bin (idempotent)
-  ansible.builtin.copy:
+- name: Install bloodhound-cli into user's go bin
+  copy:
     remote_src: yes
     src: /opt/Tools/Bloodhound-cli/bloodhound-cli
-    dest: "{{ ansible_env.HOME }}/go/bin/bloodhound-cli"
+    dest: "{{ user_home }}/go/bin/bloodhound-cli"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     mode: '0755'
     force: yes
-  become: false
-
+  become: true
