@@ -23,6 +23,14 @@
     group: "{{ lookup('env', 'USER') }}"
     mode: '0644'
 
+- name: Copying Tmux Log Parser
+  copy:
+    src: "{{ role_path }}/files/log_parser.py"
+    dest: "{{ ansible_env.HOME }}/Logs/log_parser.py"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0644'
+
 - name: Tmux logging script
   copy:
     src: "{{ role_path }}/files/tmux_logging.sh"

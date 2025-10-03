@@ -1,4 +1,3 @@
----
 - name: Ensure /opt/Tools directory exists
   file:
     path: /opt/Tools
@@ -12,11 +11,13 @@
   become: yes
   ansible.builtin.command: echo "Sudo refreshed"
 
-- name: Clone GitHub repositories
-  git:
+- name: Start cloning GitHub repositories concurrently (shallow clones)
+  ansible.builtin.git:
     repo: "{{ item.repo }}"
     dest: "/opt/Tools/{{ item.name }}"
-    recursive: "{{ item.recursive | default(false) }}"
+    depth: 1
+    single_branch: yes
+    update: no
   loop:
     - { repo: "https://github.com/DidierStevens/DidierStevensSuite", name: "DidierStevensSuite" }
     - { repo: "https://github.com/danielbohannon/Invoke-Obfuscation", name: "Invoke-Obfuscation" }
@@ -30,9 +31,9 @@
     - { repo: "https://github.com/joey-melo/netcredz", name: "netcredz" }
     - { repo: "https://github.com/AlmondOffSec/PassTheCert", name: "PassTheCert" }
     - { repo: "https://github.com/topotam/PetitPotam", name: "PetitPotam" }
+    - { repo: "https://github.com/Adaptix-Framework/AdaptixC2", name: "AdaptixC2" }
     - { repo: "https://github.com/nicocha30/ligolo-ng", name: "ligolo-ng" }
     - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
-    - { repo: "https://github.com/danielmiessler/SecLists", name: "SecLists" }
     - { repo: "https://github.com/ShutdownRepo/pywhisker", name: "pywhisker" }
     - { repo: "https://github.com/dirkjanm/PKINITtools", name: "PKINITtools" }
     - { repo: "https://github.com/lgandx/PCredz", name: "PCredz" }
@@ -40,12 +41,47 @@
     - { repo: "https://github.com/MaLDAPtive/Invoke-Maldaptive", name: "Invoke-Maldaptive" }
     - { repo: "https://github.com/LuemmelSec/Pentest-Tools-Collection", name: "Pentest-Tools-Collection" }
     - { repo: "https://github.com/JohnHammond/binnim", name: "binnim" }
+    - { repo: "https://github.com/SpecterOps/bloodhound-cli", name: "Bloodhound-cli" }    
+  async: 900        # allow up to 15 minutes per clone
+  poll: 0           # run in background
+  register: git_jobs
+  ignore_errors: yes
+  loop_control:
+    label: "{{ item.name }}"
 
-- name: Build ligolo-ng binaries
+- name: Wait for the clones to finish (poll jobs)
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: git_job_status
+  until: git_job_status.finished
+  retries: 120
+  delay: 5
+  loop: "{{ git_jobs.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+
+- name: Build ligolo-ng binaries (run in background)
   shell: |
+    set -e
+    cd /opt/Tools/ligolo-ng
+    # ensure dependencies are cached before build — speeds repeated runs
+    go env GOPROXY >/dev/null || true
     go build -o agent cmd/agent/main.go
     go build -o proxy cmd/proxy/main.go
     GOOS=windows go build -o agent.exe cmd/agent/main.go
     GOOS=windows go build -o proxy.exe cmd/proxy/main.go
   args:
-    chdir: /opt/Tools/ligolo-ng
+    executable: /bin/bash
+  async: 600
+  poll: 0
+  register: ligolo_build_job
+  ignore_errors: yes
+
+- name: Wait for ligolo-ng build to finish
+  async_status:
+    jid: "{{ ligolo_build_job.ansible_job_id }}"
+  register: ligolo_build_status
+  until: ligolo_build_status.finished
+  retries: 60
+  delay: 5
+

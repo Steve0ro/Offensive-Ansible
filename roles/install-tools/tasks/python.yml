@@ -24,7 +24,6 @@
     name: "{{ item }}"
     state: latest
   loop:
-    - mitmproxy2swagger
-    - arjun
     - xlsxgrep
     - certipy-ad
+    - evil-winrm-py

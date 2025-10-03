@@ -1,0 +1,44 @@
+- name: Ensure /opt/Tools directory exists
+  file:
+    path: /opt/Tools
+    state: directory
+    owner: "{{ lookup('env','USER') }}"
+    group: "{{ lookup('env','USER') }}"
+    mode: '0755'
+  become: true
+
+- name: Refresh sudo token (if needed)
+  # if you need to refresh become credentials use become: true and run a harmless command
+  become: true
+  ansible.builtin.command: whoami
+
+- name: Compile BloodHound-CLI
+  shell: |
+    set -e
+    go build -ldflags="-s -w -X 'github.com/SpecterOps/BloodHound_CLI/cmd/config.Version=`git describe --tags --abbrev=0`' -X 'github.com/SpecterOps/BloodHound_CLI/cmd/config.BuildDate=`date -u '+%d %b %Y'`'" -o bloodhound-cli main.go
+  args:
+    chdir: /opt/Tools/Bloodhound-cli
+  register: build_bh
+  failed_when: build_bh.rc != 0
+  changed_when: "'bloodhound-cli' in build_bh.stdout or build_bh.rc == 0"
+
+- name: Ensure user's go bin dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/go/bin"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0755'
+  become: false
+
+- name: Install bloodhound-cli into user's go bin (idempotent)
+  ansible.builtin.copy:
+    remote_src: yes
+    src: /opt/Tools/Bloodhound-cli/bloodhound-cli
+    dest: "{{ ansible_env.HOME }}/go/bin/bloodhound-cli"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0755'
+    force: yes
+  become: false
+

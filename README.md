@@ -12,9 +12,24 @@ git clone https://github.com/steve0ro/Offensive-Build
 cd Offensive-Build
 ```
 
-2. Run the Deployment Script
+2. Run the Deployment Script in `Verbose` mode
 ```bash
-bash ./deploy.sh
+bash ./deploy.sh -v
+```
+
+3. Run the Deployment Script in `Normal` mode
+```bash
+bash ./deploy.sh -y
+```
+
+4. Run the Deployment Script in `Quiet` mode
+```bash
+bash ./deploy.sh -q
+```
+
+5. Run the Deployment Script for `Help Menu` 
+```bash
+bash ./deploy.sh -h
 ```
 
 This will install the necessary tools and configurations specific to your environment.

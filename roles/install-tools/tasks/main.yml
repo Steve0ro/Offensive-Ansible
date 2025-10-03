@@ -1,10 +1,13 @@
 ---
-- include_tasks: apt-stuff.yml
+- include_tasks: apt.yml
 - include_tasks: zsh.yml
-- include_tasks: go-tools.yml
-- include_tasks: github-repos.yml
-- include_tasks: binnim-install.yml
-- include_tasks: python-tools.yml
-- include_tasks: gem-tools.yml
-- include_tasks: xq-install.yml
+- include_tasks: go.yml
+- include_tasks: github.yml
+- include_tasks: binnim.yml
+- include_tasks: python.yml
+- include_tasks: gem.yml
+- include_tasks: xq.yml
 - include_tasks: powershell.yml
+- include_tasks: bloodhound.yml
+- include_tasks: adaptix.yml
+- include_tasks: docker.yml

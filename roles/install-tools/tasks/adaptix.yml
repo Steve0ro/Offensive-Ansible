@@ -1,0 +1,29 @@
+- name: Build AdaptixC2 binaries
+  become: true
+  become_method: sudo
+  shell: |
+    set -e
+    cd /opt/Tools/AdaptixC2
+    # use parallel build and keep-going so builds are faster/more robust
+    make -j$(nproc) -k all
+  args:
+    executable: /bin/bash
+  register: adaptix_build
+  failed_when: false
+
+- name: Report Adaptix build result
+  debug:
+    msg: |
+      Adaptix build rc={{ adaptix_build.rc }}
+      stdout_lines={{ adaptix_build.stdout_lines | length }}
+      stderr_lines={{ adaptix_build.stderr_lines | length }}
+  when: adaptix_build is defined
+
+- name: Ensure user has access to repo
+  file:
+    path: /opt/Tools/AdaptixC2
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+    mode: '0755'
+  become: true

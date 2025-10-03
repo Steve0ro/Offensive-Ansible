@@ -30,10 +30,23 @@
       - libsqlite3-dev
       - highlight
       - gdb
+      - caido
+      - caido-cli
+      - mingw-w64
       - fonts-firacode
       - wget
       - curl
       - llvm
+      - make
+      - cmake
+      - qt6-base-dev
+      - qt6-base-private-dev
+      - libxkbcommon-dev
+      - qt6-websockets-dev
+      - qt6-declarative-dev
+      - gcc 
+      - g++
+      - g++-mingw-w64
       - libncurses5-dev
       - zsh
       - libncursesw5-dev
@@ -53,6 +66,7 @@
       - unrar
       - httpie
       - zip
+      - autorecon
       - vim
       - libxml2-dev
       - libxmlsec1-dev
@@ -80,7 +94,6 @@
       - impacket-scripts
       - netexec
       - responder
-      - crackmapexec
       - wpscan
       - evil-winrm
       - metasploit-framework

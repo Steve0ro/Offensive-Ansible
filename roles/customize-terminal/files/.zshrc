@@ -15,18 +15,21 @@ ZSH_THEME="steve0ro"
 plugins=(
     tmux
     git
+    zsh-autosuggestions 
+    fast-syntax-highlighting 
     zsh-history-substring-search
-    zsh-autosuggestions
-    zsh-syntax-highlighting
 )
 
 ZSH_TMUX_AUTOSTART=false
 ZSH_TMUX_DEFAULT_SESSION_NAME='New Build 👾'
 ZSH_TMUX_CONFIG=~/.tmux.conf
 
+HISTFILE=~/.zsh_history
+HISTSIZE=9999999
+SAVEHIST=$HISTSIZE
+
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 source $ZSH/oh-my-zsh.sh
-FORMAT="\nID\t{{.ID}}\nIMAGE\t{{.Image}}\nCOMMAND\t{{.Command}}\nCREATED\t{{.RunningFor}}\nSTATUS\t{{.Status}}\nPORTS\t{{.Ports}}\nNAMES\t{{.Names}}\n"
 
 autoload -U bashcompinit
 bashcompinit
@@ -34,9 +37,14 @@ bashcompinit
 # Aliases
 unalias gf
 alias ip="ip -c"
-alias sqlmap="python /opt/Tools/sqlmap/./sqlmap.py"
 alias vi='vim'
 alias py='python3'
 alias grep='grep --color=always'
 alias colorMe='highlight -O xterm256'
 alias uz='unzip'
+alias ohmy="source ~/.zshrc"
+alias tmux_new="tmux new-session -t"
+alias tmux_ls="tmux list-sessions"
+alias rm="rm -vi"
+alias rmdir="rm -rfvi"
+alias sp='searchsploit'
