@@ -2,18 +2,17 @@
   stat:
     path: /usr/local/share/ca-certificates/BurpSuiteCA.der
   register: burp_cert
-  
+
 - name: "Copying Burp Script"
   copy:
     src: files/getburpcert.sh
     dest: /tmp/getburpcert.sh
     mode: 0744
-  when: burp_cert.stat.exists == False
+  when: not burp_cert.stat.exists
 
 - name: "Executing bash script to Download CA Certificate"
-  shell:
-    /tmp/getburpcert.sh
-  when: burp_cert.stat.exists == False
+  shell: /tmp/getburpcert.sh
+  when: not burp_cert.stat.exists
 
 - name: "Copying CA Certificate to /usr/local/share/ca-certificates"
   copy:
@@ -23,29 +22,28 @@
     group: root
     mode: 0644
   become: true
-  become_method: sudo
-  when: burp_cert.stat.exists == False
+  when: not burp_cert.stat.exists
 
-- name: Create directory for Burp Suite extras
-  ansible.builtin.file:
-    path: "{{ burpsuite_extras_dir }}"
+# Determine the non-root user who should receive the Burp config
+- name: "Determine deploy user"
+  set_fact:
+    deploy_user: "{{ lookup('env','USER') }}"
+
+- name: "Ensure user's .BurpSuite dir exists"
+  file:
+    path: "/home/{{ deploy_user }}/.BurpSuite"
     state: directory
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
     mode: '0755'
   become: true
-  become_method: sudo
 
-- name: Download jar files
-  ansible.builtin.get_url:
-    url: "{{ item.value.url }}"
-    dest: "{{ burpsuite_extras_dir }}/{{ item.value.jar }}"
-    checksum: "{{ item.value.checksum }}"
-    mode: '0644'
-  become: true
-  become_method: sudo
-  loop: "{{ lookup('dict', burpsuite_extras_jars) }}"
-  
-- name: Copy BurpSuite Community Config
+- name: "Copy BurpSuite Community Config (to user home)"
   template:
     src: "templates/UserConfigCommunity.json.j2"
-    dest: "/home/{{ ansible_user_id }}/.BurpSuite/UserConfigCommunity.json"
-
+    dest: "/home/{{ deploy_user }}/.BurpSuite/UserConfigCommunity.json"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: '0644'
+  # run as unprivileged user so file permissions/uid are correct
+  become: false
