@@ -8,8 +8,8 @@ Automates the setup of a penetration testing environment on Kali-Linux distribut
 1. Clone the Repository
 
 ```bash
-git clone https://github.com/steve0ro/Offensive-Build
-cd Offensive-Build
+git clone https://github.com/steve0ro/Offensive-Ansible
+cd Offensive-Ansible
 ```
 
 2. Run the Deployment Script in `Verbose` mode
