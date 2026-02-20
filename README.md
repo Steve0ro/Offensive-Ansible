@@ -34,6 +34,9 @@ bash ./deploy.sh -h
 
 This will install the necessary tools and configurations specific to your environment.
 
+- Comment or uncomment the yml files to
+- Currently uncommented AdaptixC2
+
 ### Compatibility
 ✅ Kali Linux
 

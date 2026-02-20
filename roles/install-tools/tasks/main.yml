@@ -9,6 +9,6 @@
 - include_tasks: xq.yml
 - include_tasks: powershell.yml
 - include_tasks: bloodhound.yml
-- include_tasks: adaptix.yml
+#- include_tasks: adaptix.yml
 - include_tasks: docker.yml
 - include_tasks: sudoers.yml

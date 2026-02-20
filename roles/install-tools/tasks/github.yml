@@ -31,9 +31,9 @@
     - { repo: "https://github.com/joey-melo/netcredz", name: "netcredz" }
     - { repo: "https://github.com/AlmondOffSec/PassTheCert", name: "PassTheCert" }
     - { repo: "https://github.com/topotam/PetitPotam", name: "PetitPotam" }
-    - { repo: "https://github.com/Adaptix-Framework/AdaptixC2", name: "AdaptixC2" }
+#    - { repo: "https://github.com/Adaptix-Framework/AdaptixC2", name: "AdaptixC2" }
     - { repo: "https://github.com/nicocha30/ligolo-ng", name: "ligolo-ng" }
-    - { repo: "https://github.com/ropnop/windapsearch", name: "windapsearch" }
+    - { repo: "https://github.com/ropnop/go-windapsearch", name: "go-windapsearch" }
     - { repo: "https://github.com/ShutdownRepo/pywhisker", name: "pywhisker" }
     - { repo: "https://github.com/dirkjanm/PKINITtools", name: "PKINITtools" }
     - { repo: "https://github.com/lgandx/PCredz", name: "PCredz" }
@@ -41,7 +41,14 @@
     - { repo: "https://github.com/MaLDAPtive/Invoke-Maldaptive", name: "Invoke-Maldaptive" }
     - { repo: "https://github.com/LuemmelSec/Pentest-Tools-Collection", name: "Pentest-Tools-Collection" }
     - { repo: "https://github.com/JohnHammond/binnim", name: "binnim" }
-    - { repo: "https://github.com/SpecterOps/bloodhound-cli", name: "Bloodhound-cli" }    
+    - { repo: "https://github.com/SpecterOps/bloodhound-cli", name: "Bloodhound-cli" }
+    - { repo: "https://github.com/mverschu/adwsdomaindump", name: "adwsdomaindump" }
+    - { repo: "https://github.com/b5null/Invoke-BadSuccessor.ps1", name: "Invoke-BadSuccessor" }
+    - { repo: "https://github.com/spencer5cent/jwtknife", name: "jwtknife" }
+    - { repo: "https://github.com/danielbohannon/Out-FINcodedCommand", name: "Out-FINcodedCommand" }
+    - { repo: "https://github.com/beauknowstech/FullBypass", name: "FullBypass" }
+#    - { repo: "", name: "" }
+#    - { repo: "", name: "" }        
   async: 900        # allow up to 15 minutes per clone
   poll: 0           # run in background
   register: git_jobs
