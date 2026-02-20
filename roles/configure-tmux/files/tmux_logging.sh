@@ -1,4 +1,22 @@
 #!/usr/bin/env bash
-# Original Author: Brian - https://www.hackernotebook.com/posts/automatic-tmux-logging/
 
-tmux pipe-pane -o 'stdbuf -oL sed -r "s/\x1B\[[0-9;]*[mK]//g" | stdbuf -oL ts "%Y-%m-%dT%H:%M:%S%z: " >> $HOME/Logs/#S-#W-#I-#P.log' \; display-message 'Started logging to #S-#W-#I-#P.log'
+LOG_DIR="$HOME/Logs"
+SESSION="$(tmux display-message -p '#S')"
+WINDOW="$(tmux display-message -p '#W')"
+PANE="$(tmux display-message -p '#P')"
+
+TIMESTAMP="$(date +%Y%m%dT%H%M%S)"
+SESSION_DIR="$LOG_DIR/$SESSION"
+
+mkdir -p "$SESSION_DIR"
+
+LOG_FILE="$SESSION_DIR/${WINDOW}-${PANE}-${TIMESTAMP}.log"
+
+tmux pipe-pane -o "stdbuf -oL cat \
+| sed -r 's/\x1b\[[0-9;]*[a-zA-Z]//g' \
+| sed -r 's/\r//g' \
+| awk 'NF { print strftime(\"%Y-%m-%d %H:%M:%S\"), \"|\", \$0; fflush(); }' \
+>> \"$LOG_FILE\""
+
+
+tmux display-message "Logging started: $LOG_FILE"
