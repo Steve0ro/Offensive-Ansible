@@ -56,7 +56,6 @@
       - tk-dev
       - libffi-dev
       - liblzma-dev
-      - libfuse2
       - gron
       - network-manager
       - binwalk
