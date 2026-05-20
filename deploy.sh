@@ -135,12 +135,12 @@ if [ $rc -ne 0 ]; then
     exit $rc
 fi
 
-run_playbook "playbooks/adaptix.yml" "adaptix"
-rc=$?
-if [ $rc -ne 0 ]; then
-    printf "\n[!] 'playbooks/adaptix.yml' failed with rc=%d\n" "$rc"
-    exit $rc
-fi
+# run_playbook "playbooks/adaptix.yml" "adaptix"
+# rc=$?
+# if [ $rc -ne 0 ]; then
+#     printf "\n[!] 'playbooks/adaptix.yml' failed with rc=%d\n" "$rc"
+#     exit $rc
+# fi
 
 printf "\n[!] Finished all playbooks [!]\n\nDon't forget to sign out/sign in for Docker group membership to take effect.\n"
 exit 0
